@@ -14,9 +14,20 @@ menuBtn.addEventListener('click', openMenu);
 document.getElementById('menuX').addEventListener('click', closeMenu);
 menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
-// ---------- 首屏视频:桌面端才加载,手机只留封面 ----------
+// ---------- 首屏视频:桌面/手机都自动播放(720p 无声轻量版);省电模式拦截时首次触屏兜底 ----------
 const heroVideo = document.querySelector('.hero-video');
-if (heroVideo && desktop && !reduced) { heroVideo.src = heroVideo.dataset.src; heroVideo.preload = 'auto'; heroVideo.play().catch(()=>{}); }
+if (heroVideo && !reduced) {
+  heroVideo.muted = true; heroVideo.src = heroVideo.dataset.src; heroVideo.preload = 'auto';
+  heroVideo.play().catch(()=>{});
+}
+function kickVideos() {
+  if (heroVideo && heroVideo.paused && scrollY < innerHeight) heroVideo.play().catch(()=>{});
+  document.querySelectorAll('.vcard video').forEach(v => {
+    const r = v.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < innerHeight && v.src && v.paused) v.play().then(() => setPlayLabel(v, true)).catch(()=>{});
+  });
+}
+['touchstart','pointerdown','scroll'].forEach(ev => addEventListener(ev, kickVideos, {passive:true, once:false}));
 
 // ---------- 光标 ----------
 const cursor = document.getElementById('cursor'), cursorTxt = document.getElementById('cursorTxt');
