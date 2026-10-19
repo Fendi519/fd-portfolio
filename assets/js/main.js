@@ -73,7 +73,8 @@ document.querySelectorAll('[data-expand]').forEach(btn => btn.addEventListener('
   btn.remove();
 }));
 
-// ---------- 章节视频:进入视口静音自动播放 ----------
+// ---------- 章节视频:进入视口静音自动播放(手机先换小封面) ----------
+if (!desktop) document.querySelectorAll('video[data-poster-m]').forEach(v => { v.poster = v.dataset.posterM; });
 const vids = [...document.querySelectorAll('.vcard video')];
 function setPlayLabel(v, playing) {
   const card = v.closest('.vcard'), btn = card.querySelector('.play');
