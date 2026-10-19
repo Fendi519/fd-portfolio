@@ -34,7 +34,7 @@ const cursor = document.getElementById('cursor'), cursorTxt = document.getElemen
 if (fine && !reduced) {
   // 直接跟手,不做缓动(2026-09-12 Fendi:缓动跟随感觉滞后)
   addEventListener('mousemove', e => { cursor.style.transform = `translate(${e.clientX-6}px,${e.clientY-6}px)`; }, {passive:true});
-  document.querySelectorAll('.cell:not(.more-tile), .sheet').forEach(el => {
+  document.querySelectorAll('.cell:not(.more-tile), .sheet, .spread .pgw, .vigrid figure').forEach(el => {
     el.addEventListener('mouseenter', () => { cursor.classList.add('big'); cursorTxt.textContent = '查看'; });
     el.addEventListener('mouseleave', () => { cursor.classList.remove('big'); cursorTxt.textContent = ''; });
   });
@@ -95,7 +95,7 @@ const navLinks = [...document.querySelectorAll('.topbar nav a')];
 const chIO = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) {
     pager.hidden = false;
-    pgNum.textContent = e.target.dataset.num + ' / 12';
+    pgNum.textContent = e.target.dataset.num + ' / 13';
     pgName.textContent = e.target.dataset.name;
     navLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
   }
@@ -120,9 +120,9 @@ function show(i) {
   [cur+1, cur-1].forEach(j => { const p = new Image(); p.src = list[(j+list.length)%list.length].dataset.large; });
 }
 function hide() { lb.hidden = true; lbImg.src = ''; document.body.classList.remove('lock'); }
-document.querySelectorAll('.cell img, .sheet-img').forEach(img => img.parentElement.addEventListener('click', () => {
+document.querySelectorAll('.cell img, .sheet-img, .brand-lb').forEach(img => img.parentElement.addEventListener('click', () => {
   const sec = img.closest('section');
-  list = [...sec.querySelectorAll('.cell img, .sheet-img')];
+  list = [...sec.querySelectorAll('.cell img, .sheet-img, .brand-lb')];
   show(list.indexOf(img));
 }));
 document.getElementById('lbX').onclick = hide;
